@@ -87,6 +87,25 @@ def Map_has_key(aMap, key):
 
 def Map_items(aMap):
     """Returns a list of key, value pairs (tupple)"""
+    items = []
+    for bucket in aMap:
+        if bucket:
+            for item in bucket:
+                items.append(item)
+    
+    return items
+
+def Map_keys(aMap):
+    """Returns a list of keys."""
+    keys = []
+    for bucket in aMap:
+        if bucket:
+            for k, v in bucket:
+                keys.append(k)
+    
+    return keys
+
+def Map_pop(aMap, key, default=None):
     
 # The tests that it will work.
 
@@ -119,6 +138,12 @@ assert Map_get(jazz, 'Billy Strayhorn') == 'Lush Life'
 
 print "---- Has Key test ----"
 assert Map_has_key(jazz, 'Miles Davis')
+
+print "---- Items test ----"
+print Map_items(jazz)
+
+print "---- Keys test ----"
+print Map_keys(jazz)
 
 print "---- Delete Test ----"
 print "** Goodbye Miles **"

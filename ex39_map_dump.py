@@ -106,7 +106,33 @@ def Map_keys(aMap):
     return keys
 
 def Map_pop(aMap, key, default=None):
+    """Removes the key and returns the corresponding value"""
+    value = Map_get(aMap, key, default)
+    Map_delete(aMap, key)
     
+    return value
+
+def Map_popitem(aMap):
+    """Removes the first key, value pair and returns them as a tupple.
+    Returns None when aMap is empty."""
+    for bucket in aMap:
+        if bucket != []:
+            k, v = bucket[0]
+            Map_delete(aMap, k)
+            return (k, v)
+    
+    return None
+
+def Map_values(aMap):
+    """Returns a list of values."""
+    values = []
+    for bucket in aMap:
+        if bucket:
+            for k, v in bucket:
+                values.append(v)
+    
+    return values
+
 # The tests that it will work.
 
 jazz = Map()
@@ -119,6 +145,14 @@ Map_set(jazz, 'Billy Strayhorn', 'Lush Life')
 
 print "---- Dump test ----"
 Map_dump(jazz)
+
+print "---- Pop test ----"
+assert Map_pop(jazz, 'Billy Strayhorn') == 'Lush Life'
+assert Map_get(jazz, 'Billy Strayhorn', None) == None
+
+print "---- Popitem test ----"
+assert Map_popitem(jazz) == ('Miles Davis', 'Kind Of Blue')
+
 
 print "---- Clean test ----"
 Map_clean(jazz)
@@ -140,10 +174,15 @@ print "---- Has Key test ----"
 assert Map_has_key(jazz, 'Miles Davis')
 
 print "---- Items test ----"
-print Map_items(jazz)
+assert Map_items(jazz) == [('Billy Strayhorn', 'Lush Life'), ('Miles Davis', 
+'Kind Of Blue'), ('Duke Ellington', 'Beginning To See The Light')]
 
 print "---- Keys test ----"
-print Map_keys(jazz)
+assert Map_keys(jazz) == ['Billy Strayhorn', 'Miles Davis', 'Duke Ellington']
+
+print "---- Values test ----"
+assert Map_values(jazz) == ['Lush Life', 'Kind Of Blue',
+'Beginning To See The Light']
 
 print "---- Delete Test ----"
 print "** Goodbye Miles **"

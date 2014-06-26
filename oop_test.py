@@ -39,7 +39,7 @@ def convert(snippet, phrase):
     
     for i in range(0, snippet.count("@@@")):
         param_count = random.randint(1,3)
-        param_names.append(', '.join(random.sample(WORD, param_count)))
+        param_names.append(', '.join(random.sample(WORDS, param_count)))
     
     for sentence in snippet, phrase:
         result = sentence[:]
@@ -59,3 +59,22 @@ def convert(snippet, phrase):
         results.append(result)
     
     return results
+
+# keep going until they hit CTRL-D
+try:
+    while True:
+        snippets = PHRASES.keys()
+        random.shuffle(snippets)
+        
+        for snippet in snippets:
+            phrase = PHRASES[snippet]
+            question, answer = convert(snippet, phrase)
+            if PHRASE_FIRST:
+                question, answer = answer, question
+            
+            print question
+            
+            raw_input("> ")
+            print "ANSWER: %s\n\n" % answer
+except EOFError:
+    print "\nBye"

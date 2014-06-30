@@ -17,3 +17,8 @@ Central Corridor -> Laser Weapon Armory -> The Bridge -> Escape Pod
         |                   |                   |           |
         Death                                   Death       Death
         
+Map object has the structure for the scenes. It the information about the opening
+scene and about which scene to call next_scene
+
+Scene object contains the information about the scenes. It has the text and the 
+choices that are used in a scene. It gives the result of a choice to Engine? or Map?

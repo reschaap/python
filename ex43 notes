@@ -17,8 +17,21 @@ Central Corridor -> Laser Weapon Armory -> The Bridge -> Escape Pod
         |                   |                   |           |
         Death                                   Death       Death
         
-Map object has the structure for the scenes. It the information about the opening
-scene and about which scene to call next_scene
+* Map object has the structure for the scenes. It has the information about which 
+scenes there are and which room the player is currently in. It also has the 
+information about which choice leads to which scene. 
+    - self.current_scene keeps track of the current room the player is in
+    - next_scene gets the scene and the result of the related choice. Based on that 
+    it gives the scene to play next
+    - opening_scene sets the atrribute to the scene parameter that is given when 
+    the Map object is created
+    - the scenes are represented as a dictionary / list
+    - a scene has the following information: scene name, 
 
-Scene object contains the information about the scenes. It has the text and the 
-choices that are used in a scene. It gives the result of a choice to Engine? or Map?
+* Scene object contains the information about the scenes. It has the description
+text and the choices that are used in a scene. It will get the result of the choice 
+from the player and gives the result of a choice to the Engine object.
+
+* Engine object uses the Map object to look up which scene to play next. It takes 
+the result from a Scene object and uses that with the Map object to decide which 
+scene to play next.

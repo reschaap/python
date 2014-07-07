@@ -1,10 +1,13 @@
 * Map
     - next_scene
     - opening_scene
+    - current_scene
 * Engine
     - play
+    - next_scene
 * Scene
     - enter
+    - choice
     * Death
     * Central Corridor
     * Laser Weapon Armory
@@ -22,16 +25,27 @@ scenes there are and which room the player is currently in. It also has the
 information about which choice leads to which scene. 
     - self.current_scene keeps track of the current room the player is in
     - next_scene gets the scene and the result of the related choice. Based on that 
-    it gives the scene to play next
+    it returns the scene to play next
     - opening_scene sets the atrribute to the scene parameter that is given when 
     the Map object is created
-    - the scenes are represented as a dictionary / list
-    - a scene has the following information: scene name, 
+    - a scene has the following information: scene name, and the scenes that can 
+    follow from this scene
+    - the scenes are represented as a dictionary contaning a list. the key is the 
+    scene shortname. the list consists of the scene name and the keys of the scenes 
+    that can follow from this scene. The position of the following scenes in the 
+    list and the results of the choices in the scenes should be linked.    
 
 * Scene object contains the information about the scenes. It has the description
 text and the choices that are used in a scene. It will get the result of the choice 
 from the player and gives the result of a choice to the Engine object.
+    - enter will show the description of the scene and will call choice.
+    - choice will will present choices to the player, get the input and then return 
+    the result to the Engine object.
 
 * Engine object uses the Map object to look up which scene to play next. It takes 
 the result from a Scene object and uses that with the Map object to decide which 
 scene to play next.
+    - play uses the Map object to get the scene that needs to be played. it then 
+    calls the Scene object to be played. it recieves the result (choice) of the 
+    scene aand uses that to get the next scene to be played.
+    - when an Scene object returns 'end' the engine quits the program.

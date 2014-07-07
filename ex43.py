@@ -1,7 +1,14 @@
 class Scene (object):
     
     def enter(self):
-        pass
+        print self.enter_description
+        self.choice()
+
+    
+    def choice(self):
+        print self.choice_description
+        choice = raw_input(>..)
+        return (self.key, choice)
 
 
 class Engine(object):

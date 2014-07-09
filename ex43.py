@@ -1,5 +1,11 @@
 class Scene (object):
     
+    self.enter_description = None
+    self.enter_description = ''
+    self.choice_description = ''
+    self.key = None
+    
+    
     def enter(self):
         print self.enter_description
         self.choice()

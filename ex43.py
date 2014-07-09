@@ -1,5 +1,10 @@
 class Scene (object):
     
+    self.enter_description = ''
+    self.choice_description = ''
+    self.key = None
+    
+    
     def enter(self):
         print self.enter_description
         self.choice()
@@ -22,8 +27,9 @@ class Engine(object):
 
 class Death(Scene):
     
-    def enter(self):
-        pass
+    self.enter_description = "Death enter_description"
+    self.choice_description = "Death choice_description"
+
 
 
 class CentralCorridor(Scene):

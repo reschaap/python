@@ -27,15 +27,16 @@ class Engine(object):
 
 class Death(Scene):
     
-    self.enter_description = "Death enter_description"
-    self.choice_description = "Death choice_description"
-
+    self.enter_description = "Death enter description"
+    self.choice_description = "Death choice description"
+    self.key = death
 
 
 class CentralCorridor(Scene):
     
-    def enter(self):
-        pass
+    self.enter_description = "CentralCorridor enter description"
+    self.choice_description = "CentralCorridor choice description"
+    self.key = central_corridor
 
 
 class LaserWeaponArmory(Scene):
@@ -59,13 +60,21 @@ class EscapePod(Scene):
 class Map(object):
     
     def __init__(self, start_scene):
-        pass
+        self.current_scene = start_scene
+        self.scene_structure = { 'death' :  [Death(), CentralCorridor()], 
+        'central_corridor' :  [CentralCorridor(), Death(), LaserWeaponArmory()]
+        , 'laser_weapon_armory' : [LaserWeaponArmory(), Death(), TheBridge()]
+    
     
     def next_scene(self, scene_name):
+        if self.current_scene != None:
+            self.opening_scene()
         pass
     
     def opening_scene(self):
-        pass
+        scene_list = self.scene_structure[scene_name]
+        scene = scene_list[0]
+        
 
 
 a_map = Map('central_corridor')

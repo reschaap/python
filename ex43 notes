@@ -49,3 +49,8 @@ scene to play next.
     calls the Scene object to be played. it recieves the result (choice) of the 
     scene aand uses that to get the next scene to be played.
     - when an Scene object returns 'end' the engine quits the program.
+    - play uses a loop to go through the scenes. the loop ends when the scene 
+    object returns None. 
+    the loop start by calling scene.enter() if the result 
+    is None, the loop is stopped. the result of scene.enter() is used to call 
+    map.next_scene(). the result of map.next_scene() is used to call scene.enter()

@@ -1,9 +1,7 @@
 class Scene (object):
-    """Class holds the scene description text and scene choice description text.
-    The enter() method is used to show the scene desciption and call the 
-    choice() method. The choice() method uses the scene description text to get
-    input from the player. The choice() method then sets the scene_result 
-    attribute. The scene_result attribute has the information about which scene
+    """
+    Class holds the scene description text and scene choice description text.
+    The scene_result attribute has the information about which scene
     the result is from and what the input from the player was. The scene_result
     is used in the play() method from the Engine class.
     """
@@ -14,13 +12,22 @@ class Scene (object):
     scene_result = None
     
     def enter(self):
+        """
+        The enter() method is used to show the scene desciption and call the 
+        choice() method. 
+        """
         print self.enter_description
         self.choice()
 
     
     def choice(self):
+        """
+        The choice() method uses the scene description text to get
+        input from the player. The choice() method then sets the scene_result 
+        attribute.
+        """
         print self.choice_description
-        choice = raw_input('>..')
+        choice = int(raw_input('>..'))
         self.scene_result = (self.key, choice)
 
 
@@ -77,6 +84,11 @@ class EscapePod(Scene):
 
 
 class Map(object):
+    """
+    Class holds the information structure of the scenes including which 
+    scene leads to which. Attribute scene_structure holds the scene objects and
+    and the scene objects that lead from that. 
+    """
     
     new_scene = None
     scene_structure = { 'death' :  [Death(), CentralCorridor(), None], 
@@ -88,10 +100,13 @@ class Map(object):
 
     
     def next_scene(self, scene_result):
+        """
+        Method is used to select the next scene 
+        """
         if self.start_scene == None:
             key, choice = scene_result
             scene_list = self.scene_structure[key]
-            self.new_scene = scene_list[int(choice)]
+            self.new_scene = scene_list[choice]
         
         else:
             self.opening_scene()

@@ -1,4 +1,12 @@
 class Scene (object):
+    """Class holds the scene description text and scene choice description text.
+    The enter() method is used to show the scene desciption and call the 
+    choice() method. The choice() method uses the scene description text to get
+    input from the player. The choice() method then sets the scene_result 
+    attribute. The scene_result attribute has the information about which scene
+    the result is from and what the input from the player was. The scene_result
+    is used in the play() method from the Engine class.
+    """
     
     enter_description = ''
     choice_description = ''

@@ -73,14 +73,14 @@ class LaserWeaponArmory(Scene):
 
 class TheBridge(Scene):
     
-    def enter(self):
-        pass
+    enter_description = "TheBridge enter description"
+    choice_description = "Choose 1 or 2"
+    key = 'the_bridge'
 
 
 class EscapePod(Scene):
     
-    def enter(self):
-        pass
+    key = 'escape_pod'
 
 
 class Map(object):
@@ -93,7 +93,9 @@ class Map(object):
     new_scene = None
     scene_structure = { 'death' :  [Death(), CentralCorridor(), None], 
         'central_corridor' :  [CentralCorridor(), Death(), LaserWeaponArmory()]
-        , 'laser_weapon_armory' : [LaserWeaponArmory(), None] }
+        , 'laser_weapon_armory' : [LaserWeaponArmory(), TheBridge()], 
+        'the_bridge' : [TheBridge(), Death(), EscapePod()], 'escape_pod' : 
+        [EscapePod(), Death(), None]}
         
     def __init__(self, start_scene):
         self.start_scene = start_scene
@@ -101,7 +103,11 @@ class Map(object):
     
     def next_scene(self, scene_result):
         """
-        Method is used to select the next scene 
+        If start_scene is not set then the method is used to select the next 
+        scene using the scene_result parameter. Else opening_scene() is called.
+        The scene_result parameter consists of a scene_structure key and an 
+        integer. These values are then used to get the scene object from 
+        scene_structure.
         """
         if self.start_scene == None:
             key, choice = scene_result
@@ -113,6 +119,10 @@ class Map(object):
     
     
     def opening_scene(self):
+        """
+        The start_scene parameter is used as a key for scene_structure 
+        directory. And is used to get the starting scene object.
+        """
         scene_list = self.scene_structure[self.start_scene]
         self.new_scene = scene_list[0]
         self.start_scene = None

@@ -32,20 +32,29 @@ class Scene (object):
 
 
 class Engine(object):
+    """
+    Method calls Map object to find out which Scene object to call. It then
+    Calls the Scene object. The result from that call is then used the Map 
+    object again.
+    """
     
     def __init__(self, map):
        self.map = map
     
     def play(self):
+        """
+        The new_scene method is called om the Map object to get the Scene 
+        object to play next. It then enters a loop to go through several 
+        Scene objects 
+        """
         self.map.next_scene(None)
         scene = self.map.new_scene
-        scene.enter()
-        scene_result = scene.scene_result
         
-        while scene_result != None:
+        while scene != None:
+           scene.enter()
+           scene_result = scene.scene_result
            self.map.next_scene(scene_result)
            scene = self.map.new_scene
-           scene_result = scene.enter()
            
         print "Thank you for playing."
 
@@ -80,6 +89,8 @@ class TheBridge(Scene):
 
 class EscapePod(Scene):
     
+    enter_description = "EscapePod enter description"
+    choice_description = "Choose 1 or 2"
     key = 'escape_pod'
 
 

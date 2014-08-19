@@ -1,3 +1,5 @@
+import random
+
 class Scene (object):
     """
     Class holds the scene description text and scene choice description text.
@@ -41,6 +43,7 @@ class Engine(object):
     def __init__(self, map):
        self.map = map
     
+    
     def play(self):
         """
         The new_scene method is called om the Map object to get the Scene 
@@ -74,10 +77,99 @@ class CentralCorridor(Scene):
 
 
 class LaserWeaponArmory(Scene):
-    
-    enter_description = "LaserWeaponArmory enter description."
-    choice_description = "Press 1"
+
+    combination = None    
+    enter_description = """LaserWeaponArmory enter description."""
     key = 'laser_weapon_armory'
+  
+    def __init__(self):
+        self.number_generator()
+    
+    
+    def number_generator(self):
+        """
+        Generates a list containing 4 digits. Each digit is randomly generated
+        from the range 0-9. The list is set to the attribute self.combination. 
+        """
+        
+        self.combination = [random.randint(0,9) for i in range(0,4)]
+
+    
+    def check(self, player_input):
+        """
+        Takes the input from the player and compares it to self.combination, 
+        digit for digit. It returns how many numbers of the player input are
+        correct. 
+        """
+        correct = 0
+        
+        for i in range(0, len(player_input)):
+            if player_input[i] == self.combination[i]:
+                correct += 1
+            else:
+                continue
+        return correct
+ 
+ 
+    def get_player_input(self):
+        player_input = []
+        
+        for i in range (1, 5):
+            print "Please enter digit nr ", i," : "
+            number = int(raw_input(">.."))
+            player_input.append(number)
+        
+        return player_input
+ 
+ 
+    def choice(self):
+        """
+        Let the player enter a 4 number combination. Get the input in a list.
+        Call check() to compare self.combination and the player input to see
+        how many numbers are correct. If the player input is the same as 
+        self.combination than go to the next scene. If it is not, show the 
+        player how many numbers he got right and let the player enter another
+        4 number combination. After 10 tries show the right combination to the 
+        player. 
+        """
+        
+        number_of_guesses = 10
+        
+        print "Enter the combination of the armory."
+        print "(hint: it is 4 numbers)"
+    
+        player_input = self.get_player_input()
+        
+        correct = self.check(player_input)
+        guess = 1
+        
+
+        while guess < number_of_guesses:
+            guess += 1
+            print "The combination is wrong."
+            if correct >= 0:
+                print "You got %d right though. Please try again." % (correct)
+                player_input = self.get_player_input()
+                correct = self.check(player_input)
+            if correct == 4:
+                self.scene_result = (self.key, 1)
+            else:
+                continue
+        
+#        print "guesses ", guess
+#        print "correct ", correct
+        
+        while correct < 4:
+            print "This is taking to long. The combination of the armory is: "
+            print self.combination
+            print "Please enter it correctly this time."
+            player_input = self.get_player_input()
+            correct = self.check(player_input)
+            if correct == 4:
+                self.scene_result = (self.key, 1)
+            else:
+                continue
+
 
 
 class TheBridge(Scene):
@@ -137,9 +229,3 @@ class Map(object):
         scene_list = self.scene_structure[self.start_scene]
         self.new_scene = scene_list[0]
         self.start_scene = None
-
-
-a_map = Map('central_corridor')
-a_game = Engine(a_map)
-a_game.play()
-

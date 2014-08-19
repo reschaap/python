@@ -54,3 +54,18 @@ scene to play next.
     the loop start by calling scene.enter() if the result 
     is None, the loop is stopped. the result of scene.enter() is used to call 
     map.next_scene(). the result of map.next_scene() is used to call scene.enter()
+    
+* Laser Weapon Armory.
+    The bomb cabinet is closed with a lock. To open the lock the player needs to 
+    guess the four number combination. After a guess the player is told how many 
+    numbers are correct. The player has a limited number of guesses (10?). If 
+    the player is unable to guess the number the program displays the correct 
+    combination. The player still has to enter the combination in the end.
+    
+    The combination has to be randomly generated when the player enters the 
+    scene for the first time. The input of the player has to be checked against
+    the combination to see how any numbers are correct. A number is correct
+    when the value and the position are the same.
+    
+    The number combination is saved in a list. The player input has to be 
+    converted to a list as well for comparison.

@@ -69,3 +69,87 @@ scene to play next.
     
     The number combination is saved in a list. The player input has to be 
     converted to a list as well for comparison.
+    
+* Combat system.
+    - monkey island insult combat
+        - When in combat the player trades insults with the Gothon. Each insult 
+        has one correct reply. If the player gets enough replies right the Gothon 
+        gets dictracted enough to be killed off. If not the player gets killed.
+        
+        Each round the Gothon insults the player and the player has to choose out
+        of a set of replies. When he gets the right or the wrong reply there will
+        be an obvious response from the Gothon. 
+        
+        The player will have to try several times to learn the right combinations.
+        
+    - rock paper shotgun combat
+        - Combat is played by the rock / paper / scissors rules. When one wins 
+        a round one gets a hit. The first to score 3 hits wins the encounter.
+        The three combat choices are shoot / duck / melee. Shoot wins from melee.
+        Melee wins from duck. Duck wins from shoot.
+        - At the start of a round the player chooses an action. The program 
+        chooses an action at random for the Gothon. (Maybe the program analyses
+        the chosen player actions to see if the player has a bias for one of the 
+        actions. If so the program could then prefer the counter action as a result
+        for the Gothon.) The result of the round is then shown to the player.
+        - When the player wins he procedes to the next room. If not he dies.
+        
+* Combat(rock, paper, shotgun)
+    Combat
+    (rules)
+    player / (Gothon)
+    round / (encounter)
+    (combat choice) / action
+    (hits) / result
+    next room
+    
+    play
+    win
+    choose
+    score
+    show
+    procede
+    
+
+* Combat
+    - play
+    - procede
+* Round
+    - choose
+* Result
+    - show
+    - score
+* Player
+
+* show_result.
+    The result of the choices is shown in text. Taking into account the player 
+    and the Gothon choices together with the result of those choices the correct
+    running commentary of the combat is displayed. 
+    The descriptions can be pretty basic. For variation specific descriptions 
+    can be taken from the current Scene.
+    The shown results consist of descriptions of the action of the player and of 
+    the Gothon. And then shows a description of the result.
+    
+    (After a round, the result from that round leads into the choice descriptions
+    the player can take. )
+    Eventualy either the player or the Gothon will win the combat after a round.
+    This should lead into a different description. One specific for the room it
+    leads to next. This can be handeled by the Scene object after Combatround
+    returned 'end_result'.
+    The combat rules can lead to nine choice combinations.
+
+duck - duck
+shoot - shoot
+melee - melee
+duck - shoot
+duck - melee
+shoot - duck
+shoot - melee
+melee - duck
+melee - shoot
+
+    Three of which are functionally the same as in they have no effect on the 
+    health of the player / gothon.
+    Than there are three sets of the same combination where one action wins 
+    from the other. The only difference is which one choose the winning 
+    combination. 

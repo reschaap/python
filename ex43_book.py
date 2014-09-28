@@ -53,38 +53,41 @@ class CentralCorridor(Scene):
         print "flowing around his hate filled body.  He's blocking the door to the"
         print "Armory and about to pull a weapon to blast you."
         
-        action = raw_input("> ")
-        
-        if action == "shoot!":
-            print "Quick on the draw you yank out your blaster and fire it at the Gothon."
-            print "His clown costume is flowing and moving around his body, which throws"
-            print "off your aim.  Your laser hits his costume but misses him entirely.  This"
-            print "completely ruins his brand new costume his mother bought him, which"
-            print "makes him fly into an insane rage and blast you repeatedly in the face until"
-            print "you are dead.  Then he eats you."
-            return 'death'
-        
-        elif action == "dodge!":
-            print "Like a world class boxer you dodge, weave, slip and slide right"
-            print "as the Gothon's blaster cranks a laser past your head."
-            print "In the middle of your artful dodge your foot slips and you"
-            print "bang your head on the metal wall and pass out."
-            print "You wake up shortly after only to die as the Gothon stomps on"
-            print "your head and eats you."
-            return 'death'
-        
-        elif action == "tell a joke":
-            print "Lucky for you they made you learn Gothon insults in the academy."
-            print "You tell the one Gothon joke you know:"
-            print "Lbhe zbgure vf fb sng, jura fur fvgf nebhaq gur ubhfr, fur fvgf nebhaq gur ubhfr."
-            print "The Gothon stops, tries not to laugh, then busts out laughing and can't move."
-            print "While he's laughing you run up and shoot him square in the head"
-            print "putting him down, then jump through the Weapon Armory door."
+        if CombatRound.play() == 'player':
             return 'laser_weapon_armory'
-        
         else:
-            print "DOES NOT COMPUTE!"
-            return 'central_corridor'
+            return death
+        
+#        if action == "shoot!":
+#            print "Quick on the draw you yank out your blaster and fire it at the Gothon."
+#            print "His clown costume is flowing and moving around his body, which throws"
+#            print "off your aim.  Your laser hits his costume but misses him entirely.  This"
+#            print "completely ruins his brand new costume his mother bought him, which"
+#            print "makes him fly into an insane rage and blast you repeatedly in the face until"
+#            print "you are dead.  Then he eats you."
+#            return 'death'
+        
+#        elif action == "dodge!":
+#            print "Like a world class boxer you dodge, weave, slip and slide right"
+#            print "as the Gothon's blaster cranks a laser past your head."
+#            print "In the middle of your artful dodge your foot slips and you"
+#            print "bang your head on the metal wall and pass out."
+#            print "You wake up shortly after only to die as the Gothon stomps on"
+#            print "your head and eats you."
+#            return 'death'
+        
+#        elif action == "tell a joke":
+#            print "Lucky for you they made you learn Gothon insults in the academy."
+#            print "You tell the one Gothon joke you know:"
+#            print "Lbhe zbgure vf fb sng, jura fur fvgf nebhaq gur ubhfr, fur fvgf nebhaq gur ubhfr."
+#            print "The Gothon stops, tries not to laugh, then busts out laughing and can't move."
+#            print "While he's laughing you run up and shoot him square in the head"
+#            print "putting him down, then jump through the Weapon Armory door."
+#            return 'laser_weapon_armory'
+        
+#        else:
+#            print "DOES NOT COMPUTE!"
+#            return 'central_corridor'
 
 
 class LaserWeaponArmory(Scene):
@@ -210,6 +213,225 @@ class Map(object):
         return self.next_scene(self.start_scene)
 
 
-a_map = Map('central_corridor')
-a_game = Engine(a_map)
-a_game.play()
+class Player(object):
+    """
+    Keeps track of the player status. Used to see which player wins or loses
+    a round.
+    """
+    def __init__(self):
+        self.hits = 3
+
+
+class CombatRound(object):
+    """
+    Ask the player which action the player will take and choose a random action
+    for the Gothon. 
+    
+    Call Result() with 'choices' as argument to process the actions and show
+    the result of the chosen actions.    
+    
+    Check to see if the player or the Gothon has no more hits left. If so return
+    the winner who still has hits left as 'end_result' to the Scene().
+    """
+    def __init__(self, current_scene):
+        self.current_scene = current_scene
+        self.get_result = Result()
+        self.player = Player()
+        self.gothon = Player()
+        
+    def play(self):
+        choices = self.choose()
+        self.get_result.score(choices)
+        end_result = self.check_hits()
+        print "end_result is: ", end_result
+        
+        while end_result == None:
+            choice = self.choose()
+            result = self.get_result.score()
+            self.show_result()
+            end_result = self.check_hits()
+            
+        return end_result
+
+    def choose(self):
+        print "Before the Goton makes a move however you choose to:"
+        print " 1) Raise your weapon to shoot"
+        print " 2) Hide in door opening"
+        print " 3) Attack the Gothon with your fists"
+        
+        input = int(raw_input(">.. "))
+        
+        if input == 1:
+            player_choice = 'shoot'
+        elif input == 2:
+            player_choice = 'duck'
+        elif input == 3:
+            player_choice = 'melee'
+        else:
+            print "Something has gone wrong with player input."
+            exit(1)
+        
+        gothon_choices = ['shoot', 'duck', 'melee']
+        gothon_choice = gothon_choices[randint(0, 2)]
+        return (player_choice, gothon_choice)
+
+    def check_hits(self):
+        if self.player.hits > 0 and self.gothon.hits > 0:
+            return None
+        elif self.player.hits < 1:
+            return 'gothon'
+        elif self.gothon.hits < 1:
+            return 'player'
+        else:
+            ValueError("player hits :",CombatRound.player.hits, 
+            "gothon hits:", CombatRound.gothon.hits)
+
+
+class Result(object):
+    """
+    Use 'choices' to determine whether the player or the Gothon or neither gets
+    hit. Update the correct Player.hits when necessary.
+    
+    Use 'choices' and 'result' to show a description of the result to the player.
+    (The scene specific descriptions are taken from the Scene() objects.)
+    """
+    def score(self, choices):
+        print "Result.score" 
+        print "choices is :", choices
+        player_choice, gothon_choice = choices
+        print "player_choice is ", player_choice
+        print "gothon_choice is ", gothon_choice
+        
+        if player_choice == gothon_choice:
+            result = 'neither'
+        elif player_choice == 'shoot':
+            if gothon_choice == 'melee':
+                CombatRound.gothon.hits -= 1
+                result = 'player'
+            else:
+                CombatRound.player.hits -= 1
+                result = 'gothon'
+        elif player_choice == 'duck':
+            if gothon_choice == 'shoot':
+                CombatRound.gothon.hits -= 1
+                result = 'player'
+            else:
+                CombatRound.player.hits -= 1
+                result = 'gothon'
+        elif player_choice == 'melee':
+            if gothon_choice == 'duck':
+                CombatRound.gothon.hits -= 1
+                result = 'player'
+            else:
+                CombatRound.player.hits -= 1
+                result = 'gothon'
+        else:
+            raise ValueError("player_choice :", player_choice, "gothon_choice :",
+            gothon_choice)
+        
+        self.show_result(choices, result)
+    
+    def show_result(self, choices, result):
+        player_choice, gothon_choice = choices
+        
+        if player_choice == 'shoot':
+            player_action = "You shoot at the Gothon"
+        elif player_choice == 'duck':
+            player_action = "You hide in the doorway"
+        elif player_choice == 'melee':
+            player_action = "You run up to the Gothon to take him on with your fists"
+        else:
+            raise ValueError("choices :", choices)
+        
+        if gothon_choice == 'shoot':
+            gothon_action = " and the Gothon takes a shot at you."
+        elif gothon_choice == 'duck':
+            gothon_action = " and the Gothon hides in a doorway."
+        elif gothon_choice == 'melee':
+            gothon_action = " and the Gothon runs up to you waving his fists."
+        else:
+            raise ValueError("choices :", choices)
+        
+        if result == 'player':
+            if player_choice == 'shoot':
+                result_descr = """
+                You fire your weapon and hit The Gothon before he gets close.
+                He scrambles back.
+                """
+            elif player_choice == 'duck':
+                result_descr = """
+                The Gothon shoots at you while you hide in the doorway. You 
+                fire back without looking and get lucky. One of your shots 
+                managed to hit the Gothon.
+                """
+            elif player_choice == 'melee':
+                result_descr = """
+                With the Gothon hiding he does not see you coming. The Gothon
+                may be big but you are still able to hurt him in close combat.
+                You get in a good couple of hits before the Gothon gets away
+                from you.
+                """
+            else:
+                raise ValueError("player_choice :", player_choice)
+            
+        elif result == 'gothon':
+            if gothon_choice == 'shoot':
+                result_descr = """
+                The Gothon fires his weapon and hits you before you get close.
+                You scramble back to where you came from.
+                """
+            elif gothon_choice == 'duck':
+                result_descr = """
+                You shoot at the Gothon while he hides in the doorway. He 
+                fires back without looking and gets lucky. One of his shots 
+                managed to hit you.
+                """
+            elif gothon_choice == 'melee':
+                result_descr = """
+                With you hiding you don't see him coming. The Gothon
+                is big and powerful and you get quite a beating before you 
+                manage to get away.
+                """
+            else:
+                raise ValueError("gothon_choice :", gothon_choice)
+        
+        elif result == 'neither':
+            if player_choice == 'shoot':
+                result_descr = """
+                You both stand there shooting at each other but neither you or 
+                the Gothon is able to hit the other. After a while you both give
+                up.
+                """
+            elif player_choice == 'duck':
+                result_descr = """
+                You duck into a doorway waiting for what comes. However nothing
+                is happening. After awhile you peek around the corner and you 
+                see the Gothon peeking around the corner of the doorway he was 
+                hiding in. Apparently you both had the same idea.
+                """
+            elif player_choice == 'melee':
+                result_descr = """
+                You keep your head down and run as fast as you can so you can 
+                close the distance between you two as quickly as possible.
+                All of a sudden you run into something and you get knocked down 
+                to the floor.
+                When you look up you see the Gothon lying on the floor aswell. 
+                Looks like the Gothon was not paying any attention to where he 
+                was going either so you inevitably met halfway. 
+                You both scramble back to where you came from.
+                """
+        
+        else:
+            raise ValueError("result :", result)
+        #results = {
+        #    'shoot' : "%s fires %s weapon and the shot finds a target. %s takes a hit and is badly hurt",
+            
+        #'shoot' scoring description
+        #'duck' scoring description
+        #'melee' scoring description
+        
+        #print "Round.show_result"
+        #print "result is", result
+        #print "current_scene is ", self.current_scene
+        
+        print "\n" + player_action + gothon_action + "\n" + result_descr

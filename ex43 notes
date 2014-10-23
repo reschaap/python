@@ -153,3 +153,16 @@ melee - shoot
     Than there are three sets of the same combination where one action wins 
     from the other. The only difference is which one choose the winning 
     combination. 
+    
+* EscapePod
+    The right pod is determined randomly from a total number of 5 pods. The Player
+    has to choose the right one to get away. If the player has choosen a wrong pod 
+    he will be told of two pods that are wrong not including the pod he has chosen.
+    The player then gets to choose again. Now between three pods. 
+    These three pods wil be the right pod, the pod the player has chosen and the 
+    last wrong pod.
+    
+    The pods will be in a list(escape_pods). From this list the correct pod and the
+    chosen pod can be taken. This will leave a list(wrong_escape_pods) from which
+    the two wrong pods can be chosen. Finally there is the list(second_choice) with
+    the three pods from which the player can choose a second time. 

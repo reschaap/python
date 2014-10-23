@@ -4,7 +4,7 @@ from random import randint
 class Scene(object):
     
     def enter(self):
-        print "This scne is not yet configured. Subclass it and implement enter()."
+        print "This scene is not yet configured. Subclass it and implement enter()."
         exit(1)
 
 
@@ -20,7 +20,13 @@ class Engine(object):
         
         while True:
             print "\n--------"
-            next_scene_name = current_scene.enter()
+            scene_name = current_scene.enter()
+            if scene_name == 'death':
+                death_scene = Death()
+                death_scene.enter()
+                continue
+            else:
+                next_scene_name = scene_name
             print "next scene", next_scene_name
             current_scene = self.scene_map.next_scene(next_scene_name)
             print "map returns new scene", current_scene
@@ -35,9 +41,18 @@ class Death(Scene):
         "I have a small puppy that's better at this."
     ]
     
+    
     def enter(self):
+        print "\n"
         print Death.quips[randint(0, len(self.quips)-1)]
-        exit(1)
+        print "\n"
+        print "Do you still want to go on?"
+        answer = raw_input("y/n? >..")
+        if answer == 'y':
+            pass
+        else:
+            exit(1)
+
 
 class CentralCorridor(Scene):
     
@@ -53,41 +68,14 @@ class CentralCorridor(Scene):
         print "flowing around his hate filled body.  He's blocking the door to the"
         print "Armory and about to pull a weapon to blast you."
         
-        if CombatRound.play() == 'player':
+        combat = CombatRound('central_corridor')
+        if combat.play() == 'player':
+            print "The last hit was finally enough. The Gothon doesn't get up"
+            print "this time. You are free to jump through the Weapon Armory"
+            print "door."
             return 'laser_weapon_armory'
         else:
-            return death
-        
-#        if action == "shoot!":
-#            print "Quick on the draw you yank out your blaster and fire it at the Gothon."
-#            print "His clown costume is flowing and moving around his body, which throws"
-#            print "off your aim.  Your laser hits his costume but misses him entirely.  This"
-#            print "completely ruins his brand new costume his mother bought him, which"
-#            print "makes him fly into an insane rage and blast you repeatedly in the face until"
-#            print "you are dead.  Then he eats you."
-#            return 'death'
-        
-#        elif action == "dodge!":
-#            print "Like a world class boxer you dodge, weave, slip and slide right"
-#            print "as the Gothon's blaster cranks a laser past your head."
-#            print "In the middle of your artful dodge your foot slips and you"
-#            print "bang your head on the metal wall and pass out."
-#            print "You wake up shortly after only to die as the Gothon stomps on"
-#            print "your head and eats you."
-#            return 'death'
-        
-#        elif action == "tell a joke":
-#            print "Lucky for you they made you learn Gothon insults in the academy."
-#            print "You tell the one Gothon joke you know:"
-#            print "Lbhe zbgure vf fb sng, jura fur fvgf nebhaq gur ubhfr, fur fvgf nebhaq gur ubhfr."
-#            print "The Gothon stops, tries not to laugh, then busts out laughing and can't move."
-#            print "While he's laughing you run up and shoot him square in the head"
-#            print "putting him down, then jump through the Weapon Armory door."
-#            return 'laser_weapon_armory'
-        
-#        else:
-#            print "DOES NOT COMPUTE!"
-#            return 'central_corridor'
+            return 'death'
 
 
 class LaserWeaponArmory(Scene):
@@ -98,17 +86,26 @@ class LaserWeaponArmory(Scene):
         print "You stand up and run to the far side of the room and find the"
         print "neutron bomb in its container.  There's a keypad lock on the box"
         print "and you need the code to get the bomb out.  If you get the code"
-        print "wrong 10 times then the lock closes forever and you can't"
+        print "wrong 15 times then the lock closes forever and you can't"
         print "get the bomb.  The code is 3 digits."
         code = "%d%d%d" % (randint(1,9), randint(1,9), randint(1,9))
         guess = raw_input("[keypad]> ")
         guesses = 1
         
-        while guess != code and guesses < 10:
+        while guess != code and guesses < 15:
             print "BZZZZEDDD!"
             guesses += 1
-            guess  = raw_input("[keypad]> ")
+            
+            correct = 0
         
+            for i in range(0, len(code)):
+                if guess[i] == code[i]:
+                    correct += 1
+                else:
+                    continue
+            print "You got %d right." % (correct)
+            guess  = raw_input("[keypad]> ")
+ 
         if guess == code:
             print "The container click open and the seal breaks, letting gas out."
             print "You grab the neutron bomb and run as fast as you can to the"
@@ -125,41 +122,32 @@ class LaserWeaponArmory(Scene):
 class TheBridge(Scene):
     
     def enter(self):
-        print "You burst onto the Bridge with the netron destruct bomb"
+        print "You burst onto the Bridge with the neutron destruct bomb"
         print "under your arm and surprise 5 Gothons who are trying to"
         print "take control of the ship.  Each of them has an even uglier"
         print "clown costume than the last.  They haven't pulled their"
         print "weapons out yet, as they see the active bomb under your"
         print "arm and don't want to set it off."
+        print "You place the bomb on the floor and aim your weapon at it."
+        print "Then you start counting back from three."
+        print "By the time you reach 'one' 4 of the Gothons have run past you"
+        print "heading back to their ship."
+        print "Unfortunatly the last one seems to call your bluff and is"
+        print "reaching for his weapon."
         
-        action = raw_input("> ")
-        
-        if action == "throw the bomb":
-            print "In a panic you throw the bomb at the group of Gothons"
-            print "and make a leap for the door.  Right as you drop it a"
-            print "Gothon shoots you right in the back killing you."
-            print "As you die you see another Gothon frantically try to disarm"
-            print "the bomb. You die knowing they will probably blow up when"
-            print "it goes off."
-            return 'death'
-        
-        elif action == "slowly place the bomb":
-            print "You point your blaster at the bomb under your arm"
-            print "and the Gothons put their hands up and start to sweat."
-            print "You inch backward to the door, open it, and then carefully"
-            print "place the bomb on the floor, pointing your blaster at it."
-            print "You then jump back through the door, punch the close button"
-            print "and blast the lock so the Gothons can't get out."
-            print "Now that the bomb is placed you run to the escape pod to"
-            print "get off this tin can."
+        combat = CombatRound('the_bridge')
+        if combat.play() == 'player':
+            print "This time the Gothon is just laying there. You think you"
+            print "finally got him. You set the bomb to go off in a"
+            print "couple of minutes. Then you run to the escape pod to get"
+            print "off this tin can."
             return 'escape_pod'
         else:
-            print "DOES NOT COMPUTE!"
-            return "the_bridge"
+            return 'death'
 
 
 class EscapePod(Scene):
-    
+
     def enter(self):
         print "You rush through the ship desperately trying to make it to"
         print "the escape pod before the whole ship explodes.  It seems like"
@@ -170,23 +158,44 @@ class EscapePod(Scene):
         print "do you take?"
         
         good_pod = randint(1,5)
+        print "good_pod :", good_pod
         guess = raw_input("[pod #]> ")
         
-        if int(guess) != good_pod:
-            print "You jump into pod %s and hit the eject button." % guess
-            print "The pod escapes uit into the void of space, then"
-            print "implodes as the hull ruptures, crushing your body"
-            print "into jam jelly."
-            return 'death'
-        else:
-            print "You jump into pod %s and hit the eject button." % guess
-            print "The pod easily slides out into space heading to"
-            print "the planet below. As it flies to the planet, you look"
-            print "back and see your ship implode then explode like a"
-            print "bright star, taking out the Gothon ship at the same"
-            print "time. You won!"
+        while int(guess) != good_pod:
+            bad_escape_pods = [1, 2, 3, 4, 5]
+            bad_escape_pods.remove(good_pod)
+            bad_escape_pods.remove(int(guess))
+            second_choice = []
+            second_choice.append(good_pod)
+            second_choice.append(int(guess))
+            second_choice.append(bad_escape_pods.pop(randint(0,2)))
+            second_choice.sort()
             
-            return 'finished'
+            print "When you move to pod %s the warning lights of pods" % guess
+            print "%d and %d start flashing. Seeing the pods fail" % (bad_escape_pods[0],
+            bad_escape_pods[1])
+            print "right before your eyes makes you doubt whether you have"
+            print "chosen the right pod. Pods %d, %d and %d are left." % (second_choice[0],
+            second_choice[1], second_choice[2])
+            print "Which one do you take?"
+            
+            guess = raw_input("[pod #]> ")
+            
+            if int(guess) != good_pod:
+                print "You jump into pod %s and hit the eject button." % guess
+                print "The pod escapes into the void of space, then"
+                print "implodes as the hull ruptures, crushing your body"
+                print "into jam jelly."
+                return 'death'
+        
+        print "You jump into pod %s and hit the eject button." % guess
+        print "The pod easily slides out into space heading to"
+        print "the planet below. As it flies to the planet, you look"
+        print "back and see your ship implode then explode like a"
+        print "bright star, taking out the Gothon ship at the same"
+        print "time. You won!"
+            
+        exit(1)
 
 
 class Map(object):
@@ -241,15 +250,13 @@ class CombatRound(object):
         
     def play(self):
         choices = self.choose()
-        self.get_result.score(choices)
-        end_result = self.check_hits()
-        print "end_result is: ", end_result
+        result = self.get_result.score(choices)
+        end_result = self.check_hits(result)
         
         while end_result == None:
-            choice = self.choose()
-            result = self.get_result.score()
-            self.show_result()
-            end_result = self.check_hits()
+            choices = self.choose()
+            result = self.get_result.score(choices)
+            end_result = self.check_hits(result)
             
         return end_result
 
@@ -259,23 +266,29 @@ class CombatRound(object):
         print " 2) Hide in door opening"
         print " 3) Attack the Gothon with your fists"
         
-        input = int(raw_input(">.. "))
+        choice = int(raw_input(">.. "))
         
-        if input == 1:
+        if choice == 1:
             player_choice = 'shoot'
-        elif input == 2:
+        elif choice == 2:
             player_choice = 'duck'
-        elif input == 3:
+        elif choice == 3:
             player_choice = 'melee'
         else:
-            print "Something has gone wrong with player input."
-            exit(1)
+            raise ValueError("choice :", choice)
         
         gothon_choices = ['shoot', 'duck', 'melee']
         gothon_choice = gothon_choices[randint(0, 2)]
         return (player_choice, gothon_choice)
 
-    def check_hits(self):
+    def check_hits(self, result):
+        if result == 'player':
+            self.gothon.hits -= 1
+        elif result == 'gothon':
+            self.player.hits -= 1
+        else:
+            pass
+        
         if self.player.hits > 0 and self.gothon.hits > 0:
             return None
         elif self.player.hits < 1:
@@ -296,40 +309,31 @@ class Result(object):
     (The scene specific descriptions are taken from the Scene() objects.)
     """
     def score(self, choices):
-        print "Result.score" 
-        print "choices is :", choices
         player_choice, gothon_choice = choices
-        print "player_choice is ", player_choice
-        print "gothon_choice is ", gothon_choice
         
         if player_choice == gothon_choice:
             result = 'neither'
         elif player_choice == 'shoot':
             if gothon_choice == 'melee':
-                CombatRound.gothon.hits -= 1
                 result = 'player'
             else:
-                CombatRound.player.hits -= 1
                 result = 'gothon'
         elif player_choice == 'duck':
             if gothon_choice == 'shoot':
-                CombatRound.gothon.hits -= 1
                 result = 'player'
             else:
-                CombatRound.player.hits -= 1
                 result = 'gothon'
         elif player_choice == 'melee':
             if gothon_choice == 'duck':
-                CombatRound.gothon.hits -= 1
                 result = 'player'
             else:
-                CombatRound.player.hits -= 1
                 result = 'gothon'
         else:
             raise ValueError("player_choice :", player_choice, "gothon_choice :",
             gothon_choice)
         
         self.show_result(choices, result)
+        return result
     
     def show_result(self, choices, result):
         player_choice, gothon_choice = choices
@@ -423,15 +427,5 @@ class Result(object):
         
         else:
             raise ValueError("result :", result)
-        #results = {
-        #    'shoot' : "%s fires %s weapon and the shot finds a target. %s takes a hit and is badly hurt",
-            
-        #'shoot' scoring description
-        #'duck' scoring description
-        #'melee' scoring description
-        
-        #print "Round.show_result"
-        #print "result is", result
-        #print "current_scene is ", self.current_scene
         
         print "\n" + player_action + gothon_action + "\n" + result_descr

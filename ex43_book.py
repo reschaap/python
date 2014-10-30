@@ -11,12 +11,12 @@ class Scene(object):
 class Engine(object):
     
     def __init__(self, scene_map):
-        print "Engine __init__ has scene_map", scene_map
+#        print "Engine __init__ has scene_map", scene_map
         self.scene_map = scene_map
         
     def play(self):
         current_scene = self.scene_map.opening_scene()
-        print "Play's first scene", current_scene
+#        print "Play's first scene", current_scene
         
         while True:
             print "\n--------"
@@ -27,9 +27,9 @@ class Engine(object):
                 continue
             else:
                 next_scene_name = scene_name
-            print "next scene", next_scene_name
+#            print "next scene", next_scene_name
             current_scene = self.scene_map.next_scene(next_scene_name)
-            print "map returns new scene", current_scene
+#            print "map returns new scene", current_scene
 
 
 class Death(Scene):
@@ -158,7 +158,7 @@ class EscapePod(Scene):
         print "do you take?"
         
         good_pod = randint(1,5)
-        print "good_pod :", good_pod
+#        print "good_pod :", good_pod
         guess = raw_input("[pod #]> ")
         
         while int(guess) != good_pod:
@@ -261,7 +261,7 @@ class CombatRound(object):
         return end_result
 
     def choose(self):
-        print "Before the Goton makes a move however you choose to:"
+        print "Before the Goton makes a move you choose to:"
         print " 1) Raise your weapon to shoot"
         print " 2) Hide in door opening"
         print " 3) Attack the Gothon with your fists"
@@ -364,8 +364,7 @@ class Result(object):
                 """
             elif player_choice == 'duck':
                 result_descr = """
-                The Gothon shoots at you while you hide in the doorway. You 
-                fire back without looking and get lucky. One of your shots 
+                You fire back without looking and get lucky. One of your shots 
                 managed to hit the Gothon.
                 """
             elif player_choice == 'melee':
@@ -386,8 +385,7 @@ class Result(object):
                 """
             elif gothon_choice == 'duck':
                 result_descr = """
-                You shoot at the Gothon while he hides in the doorway. He 
-                fires back without looking and gets lucky. One of his shots 
+                He fires back without looking and gets lucky. One of his shots 
                 managed to hit you.
                 """
             elif gothon_choice == 'melee':

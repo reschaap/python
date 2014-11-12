@@ -1,0 +1,22 @@
+The interface will present text as output on a terminal. This will include 
+clear screen when nescecary. The output will start in the top left of the 
+screen. Other programs can send text to the interface and the interface will 
+take care of formatting and text position.
+These programs do have to use newline etc characters in the text to create 
+paragraphs. 
+When a program has to output text it will call the interface. 
+The interface will make sure the text will fit correctly on the screen.
+
+Text will be delivered as triple-quoted strings. These will all be taken from 
+a single module. 
+
+The interface will parse the text. The text will be cut into smaller strings which
+wil be a given length. This length will be a variable that can be set. The text 
+can contain newlines and these will be used accordingly.
+
+'text' is a string that can contain newline characters and is delimited by
+    triple qoutes. The words (including newline) in the string are added as 
+    seperate strings in a list 'words'. These strings are then combined into new
+    strings that are up to but not bigger than a fixed length 'length'. These are
+    than stored in a list 'lines'. The list 'lines' can than be used to print the
+    text.

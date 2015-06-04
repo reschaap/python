@@ -1,22 +1,85 @@
-The interface will present text as output on a terminal. This will include 
-clear screen when nescecary. The output will start in the top left of the 
-screen. Other programs can send text to the interface and the interface will 
-take care of formatting and text position.
-These programs do have to use newline etc characters in the text to create 
+-The interface will present text as output on a terminal. This will include 
+clear screen when nescecary. The output will start in the bottom left of the 
+screen. The output will also have a border of some sort. Other programs can send 
+text to the interface and the interface will take care of formatting and text 
+position.
+These programs do have to use new line etc characters in the text to create 
 paragraphs. 
 When a program has to output text it will call the interface. 
 The interface will make sure the text will fit correctly on the screen.
 
-Text will be delivered as triple-quoted strings. These will all be taken from 
+-Text will be delivered as triple-quoted strings. These will all be taken from 
 a single module. 
 
-The interface will parse the text. The text will be cut into smaller strings which
-wil be a given length. This length will be a variable that can be set. The text 
-can contain newlines and these will be used accordingly.
+-The interface will parse the text. The text will be cut into smaller strings 
+which wil be a given width. This width will be a variable that can be set. The 
+text can contain new lines and these will be used accordingly.
 
-'text' is a string that can contain newline characters and is delimited by
-    triple qoutes. The words (including newline) in the string are added as 
+'text' is a string that can contain new line characters and is delimited by
+    triple qoutes. The words (including new line) in the string are added as 
     seperate strings in a list 'words'. These strings are then combined into new
-    strings that are up to but not bigger than a fixed length 'length'. These are
+    strings that are up to but not bigger than a fixed width 'width'. These are
     than stored in a list 'lines'. The list 'lines' can than be used to print the
     text.
+    
+-Clear screen can be done by printing the appropriate number of new line 
+characters.
+
+- A border can be made by first printing a line with the same character at the 
+appropriate width. Then the same character can de added to the beginning and 
+ending of the lines of text. Finally a similar line as the first line can be 
+printed.
+
+- Besides 'width' the 'height' argument can be used to limit how many lines
+are diplayed within one border. The user will be promted to press a key to 
+go to the next border if the text needs multiple borders to be displayed.
+
+- The building of the list 'lines' is done untill the len of 'lines' is equal to 
+('height' - 2). The final two lines are than added to complete the border.
+The message 'To continue press space' is shown. After space is pressed the 
+program continues processing the remaining of the list 'words'.
+
+- The program will take the text that needs to be displayed. The text is segmented 
+into several 'border texts' with each 'border text' having the maximum number
+of lines defined by the argument 'height'. And the maximum width of the lines 
+defined by the argument 'width'.
+Each 'border text' can be a different object (or a list?). These objects can than be used to 
+display the text in the order that is required incl skipping back and forth 
+between the texts(or the lists can be organized in a dictionary).
+
+TextOutput (Receive 'text' and arguments 'width' and 'height'. Uses Text_Format
+        to create Border_Text objects. Uses Border_Text object to display 
+        the 'text')
+        
+        
+    TextFormat(Recieves the 'text' and turns it into 'border text' objects(lists?))
+    
+    Border_Text(Has the 'text' in border format. There can be several objects
+                nescecary to display all the text)
+                
+TextOutput
+    text_format
+    display_text
+    
+TextFormat
+    border_text
+    
+- total is len(border_text_list)
+total is 1 or larger than 1
+
+total is 1
+    index = 0
+    Options: End 
+    
+total is larger than 1
+    index => 0 and index =< total - 1
+    
+    index = 0
+    Options: Next, End 
+    
+    index > 0 and < total - 1
+    Options: Back, Next, End 
+    
+    index = total -1
+    Options: Back, End
+    

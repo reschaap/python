@@ -10,7 +10,7 @@ import test_texts
 # for line in lines:
 #     print line
 
-output = ex45.TextOutput(test_texts.central_corridor1, border_char='#')
+output = ex45.TextOutput(test_texts.central_corridor1, 30, 8, border_char='#')
 #output.text_format()
 output.display_text()
 

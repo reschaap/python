@@ -1,25 +1,15 @@
-from itertools import compress
-
 def matrixElementsSum(matrix):
-    mask = [1, 1, 1, 1]
+    del_index = []
     matrix_sum = 0
-    for row in matrix:
-        print("mask: {}".format(mask))
-        print("row: {}".format(row))
-        matrix_sum += sum(compress(row, mask))
-        mask = create_mask(row, mask)
+    for row in (matrix):
+        for i in del_index:
+            row[i] = 0
+        for index, value in enumerate(row):
+            if value == 0:
+                del_index.append(index)
+            else:
+                matrix_sum += value
     return matrix_sum
-
-
-def create_mask(row, mask):
-    new_mask = []
-    for index, number in enumerate(row):
-        if number > 0 and mask[index] > 0:
-            new_mask.append(1)
-        else:
-            new_mask.append(0)
-    return new_mask
-
 
 
 #client

@@ -1,20 +1,11 @@
+from collections import Counter
 from util import br
 
 
 def palindromeRearranging(inputString):
-    odd = 0
-    characters = set(inputString)
-    count = [(x, inputString.count(x)) for x in characters]
-#    import pdb; pdb.set_trace()
-    for x in count:
-        if x[1]%2 != 0:
-            odd += 1
-            if odd > 1:
-                return False, count, odd
-        else:
-            continue
-
-    return True, count
+    char_count = Counter(inputString)
+    odd = [x for x in char_count.values() if x%2 != 0]
+    return len(odd)<2
 
 
 

@@ -2,16 +2,17 @@ from util import br
 
 def isIPv4Address(inputString):
     input_list = inputString.split('.')
+    correct = range(0, 256)
 #    import pdb; pdb.set_trace()
     if len(input_list) != 4:
         return False
     else:
         try:
             for num in input_list:
-                if int(num) < 0 or int(num) > 255:
-                    return False
-                else:
+                if int(num) in correct:
                     continue
+                else:
+                    return False
         except:
             return False
     return True
